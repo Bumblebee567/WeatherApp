@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WeatherBaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Burza">
+          <Key>
+            <PropertyRef Name="BurzaID" />
+          </Key>
+          <Property Name="BurzaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Punkty_wiatr" Type="int" Nullable="false" />
+          <Property Name="Punkty_deszcz" Type="int" Nullable="false" />
+          <Property Name="Punkty_grad" Type="int" Nullable="false" />
+          <Property Name="Punkty_wyladowania" Type="int" Nullable="false" />
+          <Property Name="Kierunek_frontu" Type="nchar" MaxLength="20" />
+          <Property Name="Czas_poczatku" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Czas_konca" Type="time" Precision="7" />
+          <Property Name="Opis" Type="nchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Dzien">
+          <Key>
+            <PropertyRef Name="DzienID" />
+          </Key>
+          <Property Name="DzienID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Data" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Opady_deszczu' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Opady_deszczu">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Intensywnosc" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Pora_dnia" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Intensywnosc" Type="nchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Opady_sniegu' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Opady_sniegu">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Intensywnosc" />
+            <PropertyRef Name="Rodzaj_sniegu" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Pora_dnia" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Intensywnosc" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Rodzaj_sniegu" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Pokrywa_sniezna' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Pokrywa_sniezna">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Grubosc" />
+            <PropertyRef Name="Typ_sniegu" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Grubosc" Type="int" Nullable="false" />
+          <Property Name="Typ_sniegu" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Stan_zachmurzenia' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Stan_zachmurzenia">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Wielkosc_zachmurzenia" />
+            <PropertyRef Name="Typ_chmur" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Pora_dnia" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Wielkosc_zachmurzenia" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Typ_chmur" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Temperatura' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Temperatura">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Temp_max" />
+            <PropertyRef Name="Temp_min" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Temp_max" Type="int" Nullable="false" />
+          <Property Name="Temp_min" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'WeatherBase.dbo.Wiatr' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Wiatr">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Intensywnosc" />
+            <PropertyRef Name="Pora_dnia" />
+          </Key>
+          <Property Name="DzienID" Type="int" Nullable="false" />
+          <Property Name="Intensywnosc" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Pora_dnia" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Burza_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Burza" Type="Self.Burza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Burza">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opady_deszczu_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Opady_deszczu" Type="Self.Opady_deszczu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Opady_deszczu">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opady_sniegu_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Opady_sniegu" Type="Self.Opady_sniegu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Opady_sniegu">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pokrywa_sniezna_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Pokrywa_sniezna" Type="Self.Pokrywa_sniezna" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Pokrywa_sniezna">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stan_zachmurzenia_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Stan_zachmurzenia" Type="Self.Stan_zachmurzenia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Stan_zachmurzenia">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Temperatura_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Temperatura" Type="Self.Temperatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Temperatura">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wiatr_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Wiatr" Type="Self.Wiatr" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Wiatr">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WeatherBaseModelStoreContainer">
+          <EntitySet Name="Burza" EntityType="Self.Burza" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dzien" EntityType="Self.Dzien" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Opady_deszczu" EntityType="Self.Opady_deszczu" store:Type="Tables" Schema="dbo">
+           
+          </EntitySet>
+          <EntitySet Name="Opady_sniegu" EntityType="Self.Opady_sniegu" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <EntitySet Name="Pokrywa_sniezna" EntityType="Self.Pokrywa_sniezna" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <EntitySet Name="Stan_zachmurzenia" EntityType="Self.Stan_zachmurzenia" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <EntitySet Name="Temperatura" EntityType="Self.Temperatura" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <EntitySet Name="Wiatr" EntityType="Self.Wiatr" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <AssociationSet Name="FK_Burza_Dzien" Association="Self.FK_Burza_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Burza" EntitySet="Burza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opady_deszczu_Dzien" Association="Self.FK_Opady_deszczu_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Opady_deszczu" EntitySet="Opady_deszczu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opady_sniegu_Dzien" Association="Self.FK_Opady_sniegu_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Opady_sniegu" EntitySet="Opady_sniegu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pokrywa_sniezna_Dzien" Association="Self.FK_Pokrywa_sniezna_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Pokrywa_sniezna" EntitySet="Pokrywa_sniezna" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stan_zachmurzenia_Dzien" Association="Self.FK_Stan_zachmurzenia_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Stan_zachmurzenia" EntitySet="Stan_zachmurzenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Temperatura_Dzien" Association="Self.FK_Temperatura_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Temperatura" EntitySet="Temperatura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wiatr_Dzien" Association="Self.FK_Wiatr_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Wiatr" EntitySet="Wiatr" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WeatherBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Burza">
+          <Key>
+            <PropertyRef Name="BurzaID" />
+          </Key>
+          <Property Name="BurzaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Punkty_wiatr" Type="Int32" Nullable="false" />
+          <Property Name="Punkty_deszcz" Type="Int32" Nullable="false" />
+          <Property Name="Punkty_grad" Type="Int32" Nullable="false" />
+          <Property Name="Punkty_wyladowania" Type="Int32" Nullable="false" />
+          <Property Name="Kierunek_frontu" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Czas_poczatku" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Czas_konca" Type="Time" Precision="7" />
+          <Property Name="Opis" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Burza_Dzien" FromRole="Burza" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Dzien">
+          <Key>
+            <PropertyRef Name="DzienID" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Burza" Relationship="Self.FK_Burza_Dzien" FromRole="Dzien" ToRole="Burza" />
+          <NavigationProperty Name="Opady_deszczu" Relationship="Self.FK_Opady_deszczu_Dzien" FromRole="Dzien" ToRole="Opady_deszczu" />
+          <NavigationProperty Name="Opady_sniegu" Relationship="Self.FK_Opady_sniegu_Dzien" FromRole="Dzien" ToRole="Opady_sniegu" />
+          <NavigationProperty Name="Pokrywa_sniezna" Relationship="Self.FK_Pokrywa_sniezna_Dzien" FromRole="Dzien" ToRole="Pokrywa_sniezna" />
+          <NavigationProperty Name="Stan_zachmurzenia" Relationship="Self.FK_Stan_zachmurzenia_Dzien" FromRole="Dzien" ToRole="Stan_zachmurzenia" />
+          <NavigationProperty Name="Temperatura" Relationship="Self.FK_Temperatura_Dzien" FromRole="Dzien" ToRole="Temperatura" />
+          <NavigationProperty Name="Wiatr" Relationship="Self.FK_Wiatr_Dzien" FromRole="Dzien" ToRole="Wiatr" />
+        </EntityType>
+        <EntityType Name="Opady_deszczu">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Intensywnosc" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Pora_dnia" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Intensywnosc" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Opady_deszczu_Dzien" FromRole="Opady_deszczu" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Opady_sniegu">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Intensywnosc" />
+            <PropertyRef Name="Rodzaj_sniegu" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Pora_dnia" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Intensywnosc" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Rodzaj_sniegu" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Opady_sniegu_Dzien" FromRole="Opady_sniegu" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Pokrywa_sniezna">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Grubosc" />
+            <PropertyRef Name="Typ_sniegu" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Grubosc" Type="Int32" Nullable="false" />
+          <Property Name="Typ_sniegu" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Pokrywa_sniezna_Dzien" FromRole="Pokrywa_sniezna" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Stan_zachmurzenia">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Pora_dnia" />
+            <PropertyRef Name="Wielkosc_zachmurzenia" />
+            <PropertyRef Name="Typ_chmur" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Pora_dnia" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Wielkosc_zachmurzenia" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Typ_chmur" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Stan_zachmurzenia_Dzien" FromRole="Stan_zachmurzenia" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Temperatura">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Temp_max" />
+            <PropertyRef Name="Temp_min" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Temp_max" Type="Int32" Nullable="false" />
+          <Property Name="Temp_min" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Temperatura_Dzien" FromRole="Temperatura" ToRole="Dzien" />
+        </EntityType>
+        <EntityType Name="Wiatr">
+          <Key>
+            <PropertyRef Name="DzienID" />
+            <PropertyRef Name="Intensywnosc" />
+            <PropertyRef Name="Pora_dnia" />
+          </Key>
+          <Property Name="DzienID" Type="Int32" Nullable="false" />
+          <Property Name="Intensywnosc" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Pora_dnia" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dzien" Relationship="Self.FK_Wiatr_Dzien" FromRole="Wiatr" ToRole="Dzien" />
+        </EntityType>
+        <Association Name="FK_Burza_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Burza" Type="Self.Burza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Burza">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opady_deszczu_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Opady_deszczu" Type="Self.Opady_deszczu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Opady_deszczu">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opady_sniegu_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Opady_sniegu" Type="Self.Opady_sniegu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Opady_sniegu">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pokrywa_sniezna_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Pokrywa_sniezna" Type="Self.Pokrywa_sniezna" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Pokrywa_sniezna">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stan_zachmurzenia_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Stan_zachmurzenia" Type="Self.Stan_zachmurzenia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Stan_zachmurzenia">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Temperatura_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Temperatura" Type="Self.Temperatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Temperatura">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wiatr_Dzien">
+          <End Role="Dzien" Type="Self.Dzien" Multiplicity="1" />
+          <End Role="Wiatr" Type="Self.Wiatr" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dzien">
+              <PropertyRef Name="DzienID" />
+            </Principal>
+            <Dependent Role="Wiatr">
+              <PropertyRef Name="DzienID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WeatherBaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Burza" EntityType="Self.Burza" />
+          <EntitySet Name="Dzien" EntityType="Self.Dzien" />
+          <EntitySet Name="Opady_deszczu" EntityType="Self.Opady_deszczu" />
+          <EntitySet Name="Opady_sniegu" EntityType="Self.Opady_sniegu" />
+          <EntitySet Name="Pokrywa_sniezna" EntityType="Self.Pokrywa_sniezna" />
+          <EntitySet Name="Stan_zachmurzenia" EntityType="Self.Stan_zachmurzenia" />
+          <EntitySet Name="Temperatura" EntityType="Self.Temperatura" />
+          <EntitySet Name="Wiatr" EntityType="Self.Wiatr" />
+          <AssociationSet Name="FK_Burza_Dzien" Association="Self.FK_Burza_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Burza" EntitySet="Burza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opady_deszczu_Dzien" Association="Self.FK_Opady_deszczu_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Opady_deszczu" EntitySet="Opady_deszczu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opady_sniegu_Dzien" Association="Self.FK_Opady_sniegu_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Opady_sniegu" EntitySet="Opady_sniegu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pokrywa_sniezna_Dzien" Association="Self.FK_Pokrywa_sniezna_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Pokrywa_sniezna" EntitySet="Pokrywa_sniezna" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stan_zachmurzenia_Dzien" Association="Self.FK_Stan_zachmurzenia_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Stan_zachmurzenia" EntitySet="Stan_zachmurzenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Temperatura_Dzien" Association="Self.FK_Temperatura_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Temperatura" EntitySet="Temperatura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wiatr_Dzien" Association="Self.FK_Wiatr_Dzien">
+            <End Role="Dzien" EntitySet="Dzien" />
+            <End Role="Wiatr" EntitySet="Wiatr" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WeatherBaseModelStoreContainer" CdmEntityContainer="WeatherBaseEntities">
+          <EntitySetMapping Name="Burza">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Burza">
+              <MappingFragment StoreEntitySet="Burza">
+                <ScalarProperty Name="BurzaID" ColumnName="BurzaID" />
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Punkty_wiatr" ColumnName="Punkty_wiatr" />
+                <ScalarProperty Name="Punkty_deszcz" ColumnName="Punkty_deszcz" />
+                <ScalarProperty Name="Punkty_grad" ColumnName="Punkty_grad" />
+                <ScalarProperty Name="Punkty_wyladowania" ColumnName="Punkty_wyladowania" />
+                <ScalarProperty Name="Kierunek_frontu" ColumnName="Kierunek_frontu" />
+                <ScalarProperty Name="Czas_poczatku" ColumnName="Czas_poczatku" />
+                <ScalarProperty Name="Czas_konca" ColumnName="Czas_konca" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dzien">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Dzien">
+              <MappingFragment StoreEntitySet="Dzien">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opady_deszczu">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Opady_deszczu">
+              <MappingFragment StoreEntitySet="Opady_deszczu">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Pora_dnia" ColumnName="Pora_dnia" />
+                <ScalarProperty Name="Intensywnosc" ColumnName="Intensywnosc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opady_sniegu">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Opady_sniegu">
+              <MappingFragment StoreEntitySet="Opady_sniegu">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Pora_dnia" ColumnName="Pora_dnia" />
+                <ScalarProperty Name="Intensywnosc" ColumnName="Intensywnosc" />
+                <ScalarProperty Name="Rodzaj_sniegu" ColumnName="Rodzaj_sniegu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pokrywa_sniezna">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Pokrywa_sniezna">
+              <MappingFragment StoreEntitySet="Pokrywa_sniezna">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Grubosc" ColumnName="Grubosc" />
+                <ScalarProperty Name="Typ_sniegu" ColumnName="Typ_sniegu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stan_zachmurzenia">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Stan_zachmurzenia">
+              <MappingFragment StoreEntitySet="Stan_zachmurzenia">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Pora_dnia" ColumnName="Pora_dnia" />
+                <ScalarProperty Name="Wielkosc_zachmurzenia" ColumnName="Wielkosc_zachmurzenia" />
+                <ScalarProperty Name="Typ_chmur" ColumnName="Typ_chmur" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Temperatura">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Temperatura">
+              <MappingFragment StoreEntitySet="Temperatura">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Temp_max" ColumnName="Temp_max" />
+                <ScalarProperty Name="Temp_min" ColumnName="Temp_min" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wiatr">
+            <EntityTypeMapping TypeName="WeatherBaseModel.Wiatr">
+              <MappingFragment StoreEntitySet="Wiatr">
+                <ScalarProperty Name="DzienID" ColumnName="DzienID" />
+                <ScalarProperty Name="Intensywnosc" ColumnName="Intensywnosc" />
+                <ScalarProperty Name="Pora_dnia" ColumnName="Pora_dnia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
